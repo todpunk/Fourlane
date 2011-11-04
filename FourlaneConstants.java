@@ -1,7 +1,7 @@
 
 // Just a collection of constants to make things more readable 
 // in code when passing around numbers
-public interface iFourlaneConstants {
+public interface FourlaneConstants {
 	
 	// Event Constants
 	public static final int EVT_USERJOIN = 0;
@@ -30,6 +30,7 @@ public interface iFourlaneConstants {
 	public static final int EVT_MESSAGE = 23;
 	public static final int EVT_USERACTION = 24;
 	public static final int EVT_ACTION = 25;
+	public static final int EVT_PING = 26;
 	
 	
 }
