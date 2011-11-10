@@ -1,20 +1,59 @@
 import org.jibble.pircbot.*;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.UUID;
+import java.lang.Thread;
+import java.net.*;
+import java.io.*;
+import java.lang.*;
 
 
 public class Fourlane extends PircBot {
 
-	private List<UUID> pluginsLoaded = new ArrayList<UUID>();
-
+	private ArrayList<FourlanePlugin> pluginsLoaded = new ArrayList<FourlanePlugin>();
+	// TODO: Need a list for all event types for registration.
+	// TODO: Need to make event handlers and event registration functions.
+	
 	public Fourlane() {
 		this.setName("Fourlane");
 	}
 	
 	public Fourlane(String name) {
 		this.setName(name);
+		this.LoadPlugins();
 	}
+	
+	public void LoadPlugins() {
+		File pluginDir = new File("plugins\\");
+		File files[] = pluginDir.listFiles();
+		
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].getName().endsWith(".class")){
+				try {
+					URI uri = files[i].toURI();
+					URL url = uri.toURL();
+					URL[] urls = new URL[]{url,pluginDir.toURI().toURL()};
+					ClassLoader cl = new URLClassLoader(urls);
+					System.out.println("class found: " + files[i].getName());
+					Class cls = cl.loadClass(files[i].getName().split("\\.")[0]);
+					Object o = cls.newInstance();
+					if (o instanceof FourlanePlugin){
+						((FourlanePlugin)o).OnLoad(this);
+						((FourlanePlugin)o).start();
+						pluginsLoaded.add(((FourlanePlugin)o));
+					}
+				}
+				catch (MalformedURLException e ) {
+				}
+				catch (ClassNotFoundException e) {
+				}
+				catch (InstantiationException e) {
+				}
+				catch (IllegalAccessException e) {
+				}
+			}
+		}		
+	}
+	
 	
 	// This should be the set of functions we pump to the lists.
 	public void inMessage(String channel, String sender, String login, String hostname, String message) {
@@ -36,6 +75,10 @@ public class Fourlane extends PircBot {
 	// Functions where we do something, like from plugins.
 	public void outMessage(String target, String message) {
 		sendMessage(target, message);
+	}
+	
+	public void outCTCP(String target, String command) {
+		sendCTCPCommand(target, command);
 	}
 	
 	
@@ -67,8 +110,8 @@ public class Fourlane extends PircBot {
 	public void onVersion(String sourceNick, String sourceLogin, String sourceHostname, String target) {
 		inCTCP(sourceNick, sourceLogin, sourceHostname, target);
 	}
-
-
+	
+	
 	
 	public void onDeVoice(String channel, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
 	
