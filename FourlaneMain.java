@@ -16,5 +16,6 @@ public class FourlaneMain {
 
 		// Join the #todandlorna channel.
 		bot.joinChannel("#todandlorna");
+		bot.LoadPlugins();
 	}
 }

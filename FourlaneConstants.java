@@ -31,6 +31,6 @@ public interface FourlaneConstants {
 	public static final int EVT_USERACTION = 24;
 	public static final int EVT_ACTION = 25;
 	public static final int EVT_PING = 26;
-	
+
 	
 }

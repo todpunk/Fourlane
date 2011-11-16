@@ -32,6 +32,7 @@ public abstract class FourlanePlugin extends Thread implements FourlaneConstants
 	// so a plugin can get Run() again without being reloaded.  Do not clear state.
 	// You will, however need to return quickly.
 	public abstract void Stop();
+	
 
 }
 
